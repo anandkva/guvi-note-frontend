@@ -11,9 +11,9 @@ import { AuthProvider } from "./context/authContext";
 
 const App = () => {
   return (
-    <AuthProvider>
+    <BrowserRouter>
       <ToastContainer />
-      <BrowserRouter>
+      <AuthProvider>
         <Routes>
           <Route exact path="/*" element={<ProtectPageRoutes />} />
           <Route exact path="/login" element={<Login />} />
@@ -21,8 +21,8 @@ const App = () => {
           <Route exact path="/forgot-password" element={<ForgotPassword />} />
           <Route exact path="/submit-otp" element={<ForgotPasswordOTP />} />
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 };
 

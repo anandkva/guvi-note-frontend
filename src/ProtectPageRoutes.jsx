@@ -15,8 +15,8 @@ export default function ProtectPageRoutes() {
         <Routes>
           <Route element={<ProtectRoute />}>
             <Route exact path="/" element={<Home />} />
-            <Route exact path="/my-team" element={<MyTeam />} />
-            <Route exact path="/todo" element={<PersonalTodo />} />
+            <Route exact path="/team-goal" element={<MyTeam />} />
+            <Route exact path="/my-goal" element={<PersonalTodo />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Routes>

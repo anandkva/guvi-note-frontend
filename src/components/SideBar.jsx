@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
 export default function SideBar() {
-  const { logout } = useAuth();
+  const { authLogout } = useAuth();
   return (
     <div className="bg-blue-500 w-44 p-4">
       <div className="text-white font-bold text-xl mb-11">Guvi Goals</div>
@@ -14,18 +14,18 @@ export default function SideBar() {
           </Link>
         </li>
         <li className="mb-2 font-semibold">
-          <Link to="/todo" className="text-white">
-            Personal Todos
+          <Link to="/my-goal" className="text-white">
+            My Goal
           </Link>
         </li>
         <li className="mb-2 font-semibold">
-          <Link to="/my-team" className="text-white">
-            My Team
+          <Link to="/team-goal" className="text-white">
+           Team Goal
           </Link>
         </li>
 
         <li className="mb-2 font-semibold mt-80">
-          <button onClick={logout} className="text-white">
+          <button onClick={authLogout} className="text-white hover:shadow-2xl">
             Logout
           </button>
         </li>
