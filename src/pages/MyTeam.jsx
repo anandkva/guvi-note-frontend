@@ -1,101 +1,84 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/authContext";
+import { getGoalByMember } from "../APIs/TeamGoals";
+import DateDisplay from "../assets/dateFormat";
 
-export default function MyTeam() {
+const MyTeam = () => {
+  const navigate = useNavigate();
+  const { user, token } = useAuth();
+  const [teamGoals, setTeamGoals] = useState([]);
+
+  const handleGetAll = async () => {
+    try {
+      const memberId = user.id;
+      const response = await getGoalByMember(token, memberId);
+      if (response.code === 1) {
+        setTeamGoals(response.teamTodos);
+      }
+    } catch (error) {
+      console.error(response.message);
+    }
+  };
+  useEffect(() => {
+    handleGetAll();
+  }, []);
+
   return (
-    <>
-      <div className="text-xl font-bold pl-6 pt-14">My Team Todo</div>
-
-      <div className="flex flex-row">
-        <div className="basis-1/4">
-          <div className="pl-6 pt-2">
-            <button
-              type="button"
-              className="bg-sky-600 p-2 rounded-lg text-white hover:bg-sky-800 hover:border-black"
-            >
-              Create Team
-            </button>
-          </div>
-          <div className="p-8">
-            <table className="min-w-full border border-gray-300">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="px-4 border border-gray-300">Team Name</th>
-                </tr>
-              </thead>
-              <tbody className="hover:cursor-pointer">
-                <tr className="hover:bg-gray-50">
-                  <td className="py-2 px-4 border border-gray-300">
-                    Buy groceries
-                  </td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className="py-2 px-4 border border-gray-300">
-                    Buy groceries
-                  </td>
-                </tr>{" "}
-                <tr className="hover:bg-gray-50">
-                  <td className="py-2 px-4 border border-gray-300">
-                    Buy groceries
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+    <div className="bg-gray-100 min-h-screen">
+      <div className="container mx-auto p-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-semibold text-gray-800">Ticket List</h1>
+          <Link
+            to="/create-goal"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 ease-in-out"
+          >
+            Create
+          </Link>
         </div>
-        <div className="basis-1/2">
-          <div className="pl-6 pt-2">
-            <button
-              type="button"
-              className="bg-sky-600 p-2 rounded-lg text-white hover:bg-sky-800 hover:border-black"
-            >
-              Create Team Goal
-            </button>
-          </div>
-          <div className="p-8">
-            <table className="min-w-full border border-gray-300">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="py-2 px-4 border border-gray-300">Task</th>
-                  <th className="py-2 px-4 border border-gray-300">Status</th>
-                  <th className="py-2 px-4 border border-gray-300">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="hover:bg-gray-50">
-                  <td className="py-2 px-4 border border-gray-300">
-                    Buy groceries
-                  </td>
-                  <td className="py-2 px-4 border border-gray-300">
-                    Incomplete
-                  </td>
-                  <td className="py-2 px-4 border border-gray-300">
-                    <button className="text-blue-500 pr-5 hover:underline">
-                      Edit
-                    </button>
-                    <button className="text-red-500 hover:underline">
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className="py-2 px-4 border border-gray-300">
-                    Finish project report
-                  </td>
-                  <td className="py-2 px-4 border border-gray-300">Complete</td>
-                  <td className="py-2 px-4 border border-gray-300">
-                    <button className="text-blue-500 pr-5 hover:underline">
-                      Edit
-                    </button>
-                    <button className="text-red-500 hover:underline">
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {teamGoals &&
+            teamGoals.map((goal) => (
+              <div
+                key={goal.id}
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
+              >
+                <div>
+                  <p className="text-xl font-semibold text-gray-800">
+                    {goal.title}
+                  </p>
+                  <p className="text-gray-600 mt-2 line-clamp-3">
+                    {goal.description}
+                  </p>
+                  <div className="flex justify-between items-center mt-4">
+                    <p className="text-sm text-gray-500">
+                      DeadLine: <DateDisplay date={goal.deadline} />
+                    </p>
+                    <span
+                      className={`text-sm font-semibold ${
+                        goal.status === "Open"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {goal.status}
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <button
+                    onClick={() => navigate(`/edit-goal/${goal._id}`)}
+                    className="bg-blue-600 text-white py-1 px-3 rounded-md hover:bg-blue-700 transition-colors duration-300 ease-in-out"
+                  >
+                    Open
+                  </button>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
-    </>
+    </div>
   );
-}
+};
+
+export default MyTeam;

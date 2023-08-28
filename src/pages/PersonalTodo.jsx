@@ -94,7 +94,7 @@ const PersonalTodo = () => {
   return (
     <>
       <div className="p-8">
-        <div className="text-xl font-bold p-4">My Personal Todo</div>
+        <div className="text-xl font-bold p-4">My Personal Goal</div>
         {!isCreate && !isEdit ? (
           <div className="pb-4">
             <button

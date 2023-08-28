@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
+
 export default function SideBar() {
   const { authLogout } = useAuth();
   return (
@@ -15,12 +16,12 @@ export default function SideBar() {
         </li>
         <li className="mb-2 font-semibold">
           <Link to="/my-goal" className="text-white">
-            My Goal
+            Personal Notes{" "}
           </Link>
         </li>
         <li className="mb-2 font-semibold">
           <Link to="/team-goal" className="text-white">
-           Team Goal
+            Goals
           </Link>
         </li>
 
