@@ -15,3 +15,7 @@ export const getTeamGoalById = (token, id) => {
 export const updateTeamTodo = (token, id, data) => {
   return axiosPut(`/team-todo/update-goal/${id}`, token, data);
 };
+
+export const deleteTeamTodo = (token, todoId, data) => {
+  return axiosDelete(`/team-todo/delete-goal/${todoId}`, token, data);
+};

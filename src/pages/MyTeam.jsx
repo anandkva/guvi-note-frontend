@@ -1,30 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { getGoalByMember } from "../APIs/TeamGoals";
+import { deleteTeamTodo, getGoalByMember } from "../APIs/TeamGoals";
 import DateDisplay from "../assets/dateFormat";
+import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const MyTeam = () => {
   const navigate = useNavigate();
   const { user, token } = useAuth();
   const [teamGoals, setTeamGoals] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGetAll = async () => {
+    setIsLoading(true);
     try {
       const memberId = user.id;
       const response = await getGoalByMember(token, memberId);
       if (response.code === 1) {
         setTeamGoals(response.teamTodos);
+        setIsLoading(false);
       }
     } catch (error) {
+      setIsLoading(false);
       console.error(response.message);
     }
   };
+
+  const handleDelete = async (id) => {
+    try {
+      const todoId = id;
+      const response = await deleteTeamTodo(token, todoId);
+      if (response.code === 1) {
+        toast.success(response.message);
+        handleGetAll();
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
   useEffect(() => {
     handleGetAll();
   }, []);
 
-
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -75,6 +99,12 @@ const MyTeam = () => {
                     className="bg-blue-600 text-white py-1 px-3 rounded-md hover:bg-blue-700 transition-colors duration-300 ease-in-out"
                   >
                     Open
+                  </button>{" "}
+                  <button
+                    onClick={() => handleDelete(goal._id)}
+                    className="bg-red-700 text-white py-1 px-3 rounded-md hover:bg-red-900 transition-colors duration-300 ease-in-out"
+                  >
+                    Delete
                   </button>
                 </div>
               </div>
