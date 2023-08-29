@@ -5,7 +5,7 @@ import {
   getAllPersonalTodo,
   deletePersonalTodo,
   editPersonalTodo,
-} from "../APIs/PersonalTodo";
+} from "../APIs/personalTodo";
 import { toast } from "react-toastify";
 
 const PersonalTodo = () => {
