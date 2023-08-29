@@ -26,23 +26,27 @@ export default function CreateGoalForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const userArray = [user.id, ...selectedMembers];
+      const filleterArray = userArray.filter(
+        (value, index, array) => array.indexOf(value) === index
+      );
       const data = {
         title,
         description,
         deadline,
-        memberId: members.map((x) => x._id),
+        memberId: filleterArray,
       };
       const response = await createGoal(token, data);
       if (response.code === 1) {
         setTitle("");
         setDescription("");
         setDeadline("");
-        setMembers([]);
+        setSelectedMembers([]);
         toast.success(response.message);
         navigate("/team-goal");
       }
     } catch (error) {
-      toast.error(response.message);
+      toast.error(error.message);
     }
   };
 
@@ -58,7 +62,6 @@ export default function CreateGoalForm() {
       console.error("Error:: users not fetched", err);
     }
   };
-
 
   useEffect(() => {
     getAllUsersList();

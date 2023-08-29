@@ -26,13 +26,17 @@ const EditTeamGoal = () => {
     setIsLoading(true);
     e.preventDefault();
     try {
+      const userArray = [user.id, ...selectedMembers];
+      const filleterArray = userArray.filter(
+        (value, index, array) => array.indexOf(value) === index
+      );
       const data = {
         title,
         status,
         description,
         deadline,
         comment,
-        members: selectedMembers,
+        members: filleterArray,
       };
       const response = await updateTeamTodo(token, id, data);
       if (response.code === 1) {
