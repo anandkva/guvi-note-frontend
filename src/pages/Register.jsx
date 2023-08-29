@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { register } from "../APIs/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const inputStyles = "w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring";
 
@@ -12,9 +13,12 @@ function Register() {
   const [password, setPassword] = useState("");
   const [response, setResponse] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     const data = { email, username, password };
     try {
@@ -25,11 +29,14 @@ function Register() {
         setUsername("");
         setEmail("");
         setPassword("");
+        setIsLoading(false);
       } else if (res.code === 0) {
         toast.error(res.message);
         setResponse(res);
+        setIsLoading(false);
       }
     } catch (err) {
+      setIsLoading(false);
       console.error(`ERROR:: ${err}`);
     }
   };
@@ -37,6 +44,10 @@ function Register() {
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

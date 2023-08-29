@@ -70,15 +70,32 @@ const MyTeam = () => {
                 className="bg-white p-6 rounded-lg shadow-md hover:shadow-2xl transition-shadow duration-300 ease-in-out"
               >
                 <div>
-                  <p className="text-xl font-semibold text-gray-800">
+                  <p className="text-3xl font-semibold text-gray-800 capitalize">
                     {goal.title}
                   </p>
                   <p className="text-gray-600 mt-2 line-clamp-3">
                     {goal.description}
                   </p>
+                  <p className="text-lg text-gray-500 font-bold">
+                    Deadline:{" "}
+                    <span
+                      className={`text-lg font-semibold font-semibold ${
+                        goal.deadline < Date.now()
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      <DateDisplay date={goal.deadline} />
+                    </span>
+                  </p>
                   <div className="flex justify-between items-center mt-4">
                     <p className="text-sm text-gray-500">
-                      DeadLine: <DateDisplay date={goal.deadline} />
+                      Created by:{" "}
+                      <span className="font-bold text-emerald-600">
+                        {goal.created.by.username}
+                      </span>{" "}
+                      <br />
+                      Created at: <DateDisplay date={goal.created.at} />{" "}
                     </p>
                     <span
                       className={`text-sm font-semibold ${

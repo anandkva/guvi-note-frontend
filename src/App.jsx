@@ -9,6 +9,7 @@ import ForgotPasswordOTP from "./pages/ForgotPasswordOTP";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "./context/authContext";
 
+
 const App = () => {
   return (
     <BrowserRouter>

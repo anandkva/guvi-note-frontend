@@ -5,6 +5,7 @@ import { useAuth } from "../context/authContext";
 import { getAllUsers } from "../APIs/auth";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
+import DateDisplay from "../assets/dateFormat";
 
 const EditTeamGoal = () => {
   const { id } = useParams();
@@ -214,7 +215,10 @@ const EditTeamGoal = () => {
 
                 return (
                   <li key={index} className="mb-2">
-                    {username} {"-->"} {comment.text}
+                    <span className="font-bold">{username}</span>, <span className="text-xs"><DateDisplay date={comment.createdAt} /></span> {"-->"}{" "}
+                   <span className="capitalize">
+                   {comment.text}
+                   </span>
                   </li>
                 );
               })}

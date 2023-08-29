@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { sentOPT } from "../APIs/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     try {
       e.preventDefault();
       const data = { email };
@@ -15,14 +18,20 @@ const ForgotPassword = () => {
       if (response.code === 1) {
         toast.success(response.message);
         toast.success("Check Your Email have a received OTP");
+        setIsLoading(false);
         await navigate("/submit-otp", { state: data });
       } else {
         toast.error(response.message);
+        setIsLoading(false);
       }
     } catch (err) {
+      setIsLoading(false);
       console.error("Error::", err);
     }
   };
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

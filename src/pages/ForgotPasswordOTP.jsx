@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { resetPassword } from "../APIs/auth";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 function ForgotPasswordOTP() {
   const location = useLocation();
@@ -9,8 +10,10 @@ function ForgotPasswordOTP() {
   const [email, setEmail] = useState(location.state.email);
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     try {
       e.preventDefault();
       const data = { email, otp, newPassword };
@@ -18,13 +21,20 @@ function ForgotPasswordOTP() {
       if (response.code === 1) {
         toast.success(response.message);
         navigate("/login");
+        setIsLoading(false);
       } else {
+        setIsLoading(false);
         toast.error(response.message);
       }
     } catch (err) {
+      setIsLoading(false);
       console.error(`Error:: ${err}`);
     }
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
