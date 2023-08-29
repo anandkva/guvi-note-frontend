@@ -10,7 +10,7 @@ import DateDisplay from "../assets/dateFormat";
 const EditTeamGoal = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { token } = useAuth();
+  const { user, token } = useAuth();
   const [goal, setGoal] = useState({});
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("");
