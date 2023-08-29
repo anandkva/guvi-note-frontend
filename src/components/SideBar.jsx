@@ -4,7 +4,7 @@ import { useAuth } from "../context/authContext";
 
 
 export default function SideBar() {
-  const { authLogout } = useAuth();
+  const { authLogout, user } = useAuth();
   return (
     <div className="bg-blue-500 w-44 p-4">
       <div className="text-white font-bold text-xl mb-11">Guvi Goals</div>
@@ -26,6 +26,7 @@ export default function SideBar() {
         </li>
 
         <li className="mb-2 font-semibold mt-80">
+          <p className="text-lg font-semibold text-white">{user?.username}</p>
           <button onClick={authLogout} className="text-white hover:shadow-2xl">
             Logout
           </button>

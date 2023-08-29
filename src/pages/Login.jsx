@@ -46,11 +46,13 @@ const Login = () => {
             <label className="block text-sm font-medium">Email</label>
             <input
               value={email}
+              name="email"
               onChange={(e) => setEmail(e.target.value)}
               type="email"
               className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring"
               placeholder="Enter your email"
               required
+              autoComplete="email"
             />
           </div>
           <div className="mb-6">
@@ -59,10 +61,12 @@ const Login = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
+                name="password"
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring"
                 placeholder="Enter your password"
                 required
+                autoComplete="password"
               />
               <label
                 onClick={handlePasswordToggle}

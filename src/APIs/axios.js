@@ -12,6 +12,7 @@ const getInitializedApi = () => {
 };
 
 export const Logout = () => {
+  console.log("trigger");
   const navigate = useNavigate();
   localStorage.removeItem("authToken");
   localStorage.removeItem("userData");
@@ -28,6 +29,7 @@ export const axiosGet = async (url, token, params = "") => {
     });
     return response.data;
   } catch (err) {
+    console.log("err get", err);
     Logout();
     throw err;
   }
@@ -42,6 +44,7 @@ export const axiosPost = async (url, token, data) => {
     });
     return response.data;
   } catch (err) {
+    console.log("err post", err);
     Logout();
     throw err;
   }
@@ -56,6 +59,7 @@ export const axiosPut = async (url, token, data) => {
     });
     return response.data;
   } catch (err) {
+    console.log("put err", err);
     Logout();
     throw err;
   }
@@ -71,6 +75,7 @@ export const axiosDelete = async (url, token, params = "") => {
     });
     return response.data;
   } catch (err) {
+    console.log("del post", err);
     Logout();
     throw err;
   }

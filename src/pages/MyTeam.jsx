@@ -40,8 +40,8 @@ const MyTeam = () => {
           {teamGoals &&
             teamGoals.map((goal) => (
               <div
-                key={goal.id}
-                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
+                key={goal._id}
+                className="bg-white p-6 rounded-lg shadow-md hover:shadow-2xl transition-shadow duration-300 ease-in-out"
               >
                 <div>
                   <p className="text-xl font-semibold text-gray-800">
@@ -56,8 +56,10 @@ const MyTeam = () => {
                     </p>
                     <span
                       className={`text-sm font-semibold ${
-                        goal.status === "Open"
+                        goal.status === "complete"
                           ? "text-green-600"
+                          : goal.status === "inProgress"
+                          ? "text-blue-700"
                           : "text-red-600"
                       }`}
                     >

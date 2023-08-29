@@ -58,8 +58,6 @@ const EditTeamGoal = () => {
         setDescription(response.teamTodo.description);
         setDeadline(response.teamTodo.deadline.substr(0, 10));
         setMembers(response.teamTodo.members);
-
-        // Set selected members based on goal.members
         setSelectedMembers(response.teamTodo.members);
       }
     } catch (error) {
@@ -86,7 +84,10 @@ const EditTeamGoal = () => {
   }, []);
 
   return (
-    <div className="max-w-3xl mx-auto grid grid-cols-2 gap-8 p-6 bg-white rounded shadow">
+    <div
+      className="max-w-3xl mx-auto grid grid-cols-2 gap-8 p-6 bg-white rounded shadow overflow-scroll"
+      style={{ maxHeight: "90vh" }}
+    >
       <div>
         <h2 className="text-xl font-semibold mb-4">Edit Team Goal</h2>
         <form onSubmit={handleFormSubmit}>
@@ -193,19 +194,21 @@ const EditTeamGoal = () => {
       </div>
       <div>
         <h2 className="text-xl font-semibold mb-4">Preview Comments</h2>
-        <ul className="border p-2 rounded">
-          {goal.comments &&
-            goal.comments.map((comment, index) => {
-              const user = users.find((val) => val._id === comment.memberId);
-              const username = user ? user.username : "Unknown User";
+        <div className="border p-2 rounded max-h-40 md:max-h-[20rem] overflow-y-scroll">
+          <ul>
+            {goal.comments &&
+              goal.comments.map((comment, index) => {
+                const user = users.find((val) => val._id === comment.memberId);
+                const username = user ? user.username : "Unknown User";
 
-              return (
-                <li key={index} className="mb-2">
-                  {username} {"-->"} {comment.text}
-                </li>
-              );
-            })}
-        </ul>
+                return (
+                  <li key={index} className="mb-2">
+                    {username} {"-->"} {comment.text}
+                  </li>
+                );
+              })}
+          </ul>
+        </div>
       </div>
     </div>
   );
