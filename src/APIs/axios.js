@@ -6,7 +6,7 @@ let api = null;
 const getInitializedApi = () => {
   if (api) return api;
   return (api = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "https://guvi-goal-backend.onrender.com",
     responseType: "json",
   }));
 };
