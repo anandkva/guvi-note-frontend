@@ -17,21 +17,27 @@ const PersonalTodo = () => {
   const [isCreate, setIsCreate] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [allTodo, setAllTodo] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     handleGetAllTodo();
   }, []);
   const handleGetAllTodo = async () => {
+    setIsLoading(true);
+
     try {
       const response = await getAllPersonalTodo(token);
       if (response.personalTodos) {
         setAllTodo(response.personalTodos);
+        setIsLoading(false);
       }
     } catch (err) {
+      setIsLoading(false);
       console.log("ERROR:: ", err);
     }
   };
   const handleGoalCreate = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     try {
       const userId = user.id;
@@ -44,23 +50,29 @@ const PersonalTodo = () => {
         setDescription("");
         setIsCreate(false);
         handleGetAllTodo();
+        setIsLoading(false);
       } else {
+        setIsLoading(false);
         toast.error(response.message);
       }
     } catch (err) {
+      setIsLoading(false);
       console.log("Error:", err);
     }
   };
 
   const handleDelete = async (id) => {
+    setIsLoading(true);
     try {
       const response = await deletePersonalTodo(id, token);
       if (response.code === 1) {
         const updatedTodos = allTodo.filter((todo) => todo._id !== id);
         setAllTodo(updatedTodos);
         toast.success(response.message);
+        setIsLoading(false);
       }
     } catch (err) {
+      setIsLoading(false);
       console.error(`Error:: ${err}`);
     }
   };
@@ -74,20 +86,27 @@ const PersonalTodo = () => {
   };
 
   const handleUpdate = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
-    const id = todoId;
-    const data = { id, status, title, description };
-    const response = await editPersonalTodo(id, token, data);
-    if (response.code === 1) {
-      toast.success(response.message);
-      setIsEdit(false);
-      setTodoId("");
-      setTitle("");
-      setStatus("");
-      setDescription("");
-      handleGetAllTodo();
-    } else {
-      toast.error(response.message);
+    try {
+      const id = todoId;
+      const data = { id, status, title, description };
+      const response = await editPersonalTodo(id, token, data);
+      if (response.code === 1) {
+        toast.success(response.message);
+        setIsEdit(false);
+        setTodoId("");
+        setTitle("");
+        setStatus("");
+        setDescription("");
+        handleGetAllTodo();
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        toast.error(response.message);
+      }
+    } catch (err) {
+      console.log("Error:: ", err);
     }
   };
 
@@ -186,48 +205,66 @@ const PersonalTodo = () => {
             </div>
           </form>
         ) : null}
-        <table className="min-w-full border border-gray-300">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="py-2 px-4 border border-gray-300">Title</th>
-              <th className="py-2 px-4 border border-gray-300">Description</th>
-              <th className="py-2 px-4 border border-gray-300">Status</th>
-              <th className="py-2 px-4 border border-gray-300">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allTodo &&
-              allTodo.map((data) => {
-                return (
-                  <tr className="hover:bg-gray-50 text-center" key={data._id}>
-                    <td className="py-2 px-4 border border-gray-300">
-                      {data.title}
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300">
-                      {data.description}
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300 capitalize">
-                      {data.status}
-                    </td>
-                    <td className="py-2 px-4 border border-gray-300">
-                      <button
-                        onClick={() => handleEdit(data)}
-                        className="text-blue-500 pr-5 hover:underline"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(data._id)}
-                        className="text-red-500 hover:underline"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
+        <div
+          className="overflow-x-auto max-w-full"
+          style={{ maxWidth: "100%", overflowX: scroll }}
+        >
+          <table
+            className="min-w-full border border-gray-300"
+            style={{ maxWidth: "100%", overflowX: scroll }}
+          >
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="py-2 px-4 border border-gray-300">Title</th>
+                <th className="py-2 px-4 border border-gray-300">
+                  Description
+                </th>
+                <th className="py-2 px-4 border border-gray-300">Status</th>
+                <th className="py-2 px-4 border border-gray-300">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
+                <tr>
+                  <td colSpan="4" className="py-4 text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-blue-500 mx-auto"></div>
+                  </td>
+                </tr>
+              ) : (
+                allTodo &&
+                allTodo.map((data) => {
+                  return (
+                    <tr className="hover:bg-gray-50 text-center" key={data._id}>
+                      <td className="py-2 px-4 border border-gray-300">
+                        {data.title}
+                      </td>
+                      <td className="py-2 px-4 border border-gray-300">
+                        {data.description}
+                      </td>
+                      <td className="py-2 px-4 border border-gray-300 capitalize">
+                        {data.status}
+                      </td>
+                      <td className="py-2 px-4 border border-gray-300">
+                        <button
+                          onClick={() => handleEdit(data)}
+                          className="text-blue-500 pr-5 hover:underline"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(data._id)}
+                          className="text-red-500 hover:underline"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

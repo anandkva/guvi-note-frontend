@@ -4,6 +4,7 @@ import { getTeamGoalById, updateTeamTodo } from "../APIs/TeamGoals";
 import { useAuth } from "../context/authContext";
 import { getAllUsers } from "../APIs/auth";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const EditTeamGoal = () => {
   const { id } = useParams();
@@ -18,8 +19,10 @@ const EditTeamGoal = () => {
   const [members, setMembers] = useState([]);
   const [users, setUsers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFormSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     try {
       const data = {
@@ -33,9 +36,11 @@ const EditTeamGoal = () => {
       const response = await updateTeamTodo(token, id, data);
       if (response.code === 1) {
         toast.success(response.message);
+        setIsLoading(false);
         navigate("/team-goal");
       }
     } catch (error) {
+      setIsLoading(false);
       console.error("Error:: ", error);
     }
   };
@@ -49,6 +54,7 @@ const EditTeamGoal = () => {
   };
 
   const getTeamGoal = async () => {
+    setIsLoading(true);
     try {
       const response = await getTeamGoalById(token, id);
       if (response.code === 1) {
@@ -59,8 +65,10 @@ const EditTeamGoal = () => {
         setDeadline(response.teamTodo.deadline.substr(0, 10));
         setMembers(response.teamTodo.members);
         setSelectedMembers(response.teamTodo.members);
+        setIsLoading(false);
       }
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -83,6 +91,9 @@ const EditTeamGoal = () => {
     getAllUsersList();
   }, []);
 
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <div
       className="max-w-3xl mx-auto grid grid-cols-2 gap-8 p-6 bg-white rounded shadow overflow-scroll"

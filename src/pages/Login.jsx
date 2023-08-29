@@ -4,15 +4,17 @@ import { userLogin } from "../APIs/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/authContext";
+import Loader from "../components/Loader";
 
 const Login = () => {
-
   const { authLogin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     try {
       const data = { email, password };
@@ -24,10 +26,13 @@ const Login = () => {
           authToken: response.token,
           user: response.user,
         });
+        setIsLoading(false);
       } else {
+        setIsLoading(false);
         toast.error(response.message);
       }
     } catch (error) {
+      setIsLoading(false);
       console.error("Login error:", error);
       toast.error("An error occurred during login.");
     }
@@ -36,6 +41,10 @@ const Login = () => {
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
