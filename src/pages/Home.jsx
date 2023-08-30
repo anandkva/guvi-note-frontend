@@ -30,7 +30,8 @@ export default function Home() {
             className="bg-white text-blue-700 py-2 px-6 rounded-full font-semibold hover:bg-blue-100 transition duration-300"
           >
             Set Goal
-          </Link>{" "}
+          </Link>
+       
           <button
             className="bg-green-600 text-white py-2 px-6 rounded-full font-semibold hover:bg-green-700 transition duration-300"
             onClick={openModal}
@@ -40,11 +41,7 @@ export default function Home() {
         </div>
       </div>
       <div className="container mx-auto p-8">
-        <InviteModal
-          isOpen={modalOpen}
-          onClose={closeModal}
-          setModalOpen={setModalOpen}
-        />
+        <InviteModal isOpen={modalOpen} onClose={closeModal} setModalOpen={setModalOpen} />
       </div>
     </>
   );

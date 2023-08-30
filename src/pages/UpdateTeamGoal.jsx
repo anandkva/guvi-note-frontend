@@ -43,6 +43,8 @@ const EditTeamGoal = () => {
         toast.success(response.message);
         setIsLoading(false);
         navigate("/team-goal");
+      }else{
+        setIsLoading(false)
       }
     } catch (error) {
       setIsLoading(false);
